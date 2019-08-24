@@ -6,7 +6,7 @@ import { provList, cityList, areaList } from './js/metadata.js';
 export default class index extends Component {
   static propTypes = {
     initVal: PropTypes.array,
-    isShow: PropTypes.bool,
+    isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
     handleConfirm: PropTypes.func,
@@ -17,7 +17,6 @@ export default class index extends Component {
 
   static defaultProps = {
     initVal: [],
-    isShow: false,
     cancelText: '取消',
     confirmText: '确定',
     handleConfirm: () => {},
@@ -94,7 +93,7 @@ export default class index extends Component {
       let areas = meta[1].city_areas;
       let areaVal = areas[0].val;
 
-      if (this.lastIndex !== str) {
+      if (this.state.lastIndex !== str) {
         this.setState({
           list: [this.state.list[0], this.state.list[1], areas],
           linkageVal: [null, null, areaVal]

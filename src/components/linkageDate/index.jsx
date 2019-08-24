@@ -5,7 +5,7 @@ import LinkBase from '../linkageBase';
 export default class index extends Component {
   static propTypes = {
     initVal: PropTypes.array,
-    isShow: PropTypes.bool,
+    isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
     handleConfirm: PropTypes.func,
@@ -16,7 +16,6 @@ export default class index extends Component {
 
   static defaultProps = {
     initVal: [],
-    isShow: false,
     cancelText: '取消',
     confirmText: '确定',
     handleConfirm: () => {},
@@ -36,11 +35,11 @@ export default class index extends Component {
       yearList.push({ val: String(+year + i) });
     }
 
-    let monthList = Array.from(Array(12).keys(), num => ({
-      val: String(num + 1).padStart(2, '0')
+    let monthList = [...''.padEnd(12)].map((v, i) => ({
+      val: String(i + 1).padStart(2, '0')
     }));
-    let dateList = Array.from(Array(31).keys(), num => ({
-      val: String(num + 1).padStart(2, '0')
+    let dateList = [...''.padEnd(31)].map((v, i) => ({
+      val: String(i + 1).padStart(2, '0')
     }));
 
     this.state = {
@@ -75,8 +74,8 @@ export default class index extends Component {
     }
 
     let days = new Date(year, month, 0).getDate();
-    let dateList = Array.from(Array(days).keys(), num => ({
-      val: String(num + 1).padStart(2, '0')
+    let dateList = [...''.padEnd(days)].map((v, i) => ({
+      val: String(i + 1).padStart(2, '0')
     }));
     this.setState({ list: [this.state.list[0], this.state.list[1], dateList] });
   };
@@ -100,8 +99,8 @@ export default class index extends Component {
 
     if (which !== 2) {
       let days = new Date(val[0], val[1], 0).getDate();
-      let dateList = Array.from(Array(days).keys(), num => ({
-        val: String(num + 1).padStart(2, '0')
+      let dateList = [...''.padEnd(days)].map((v, i) => ({
+        val: String(i + 1).padStart(2, '0')
       }));
       this.setState({ list: [this.state.list[0], this.state.list[1], dateList] });
 

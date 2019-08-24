@@ -5,7 +5,7 @@ import LinkBase from '../linkageBase';
 export default class index extends Component {
   static propTypes = {
     initVal: PropTypes.array,
-    isShow: PropTypes.bool,
+    isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
     handleConfirm: PropTypes.func,
@@ -16,7 +16,6 @@ export default class index extends Component {
 
   static defaultProps = {
     initVal: [],
-    isShow: false,
     cancelText: '取消',
     confirmText: '确定',
     handleConfirm: () => {},
@@ -28,14 +27,14 @@ export default class index extends Component {
   constructor(props) {
     super(props);
 
-    let hourList = Array.from(Array(24).keys(), num => ({
-      val: String(num).padStart(2, '0')
+    let hourList = [...''.padEnd(24)].map((v, i) => ({
+      val: String(i).padStart(2, '0')
     }));
-    let minuteList = Array.from(Array(60).keys(), num => ({
-      val: String(num).padStart(2, '0')
+    let minuteList = [...''.padEnd(60)].map((v, i) => ({
+      val: String(i).padStart(2, '0')
     }));
-    let secondList = Array.from(Array(60).keys(), num => ({
-      val: String(num).padStart(2, '0')
+    let secondList = [...''.padEnd(60)].map((v, i) => ({
+      val: String(i).padStart(2, '0')
     }));
 
     this.state = {

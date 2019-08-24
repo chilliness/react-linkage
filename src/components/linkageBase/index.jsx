@@ -11,7 +11,7 @@ export default class index extends Component {
     list: PropTypes.array,
     initVal: PropTypes.array,
     linkageVal: PropTypes.array,
-    isShow: PropTypes.bool,
+    isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
     handleConfirm: PropTypes.func,
@@ -24,7 +24,6 @@ export default class index extends Component {
     list: [[{ val: '苹果' }, { val: '香蕉' }, { val: '西瓜' }, { val: '樱桃' }]],
     initVal: [],
     linkageVal: [],
-    isShow: true,
     cancelText: '取消',
     confirmText: '确定',
     handleConfirm: () => {},
@@ -34,9 +33,7 @@ export default class index extends Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      this.handleInitPos();
-    }, 60);
+    setTimeout(() => this.handleInitPos(), 60);
   }
 
   componentDidUpdate(prevProps) {
@@ -51,7 +48,7 @@ export default class index extends Component {
   }
 
   componentWillUnmount() {
-    document.removeEventListener('touchmove', this.handlePrevent, { passive: false });
+    document.removeEventListener('touchmove', this.handlePrevent);
   }
 
   handleInitPos = () => {
@@ -59,24 +56,18 @@ export default class index extends Component {
       return;
     }
 
-    let aPos = [];
-    this.props.list.forEach((item, index) => {
-      aPos.push(item.findIndex(item => item.val === this.props.initVal[index]));
-    });
+    let aPos = this.props.list.map((item, index) => item.findIndex(obj => obj.val === this.props.initVal[index]));
 
     if (aPos.includes(-1)) {
-      return console.log(this.props.initVal, '初始化失败，请核对数据有效性');
+      throw Error('初始化失败，请核对数据有效性');
     }
 
-    let timerOut = setTimeout(() => {
-      clearTimeout(timerOut);
-      [...this.refs.listBox.children].forEach((item, index) => {
-        let val = -css(item.children[0], 'height') * aPos[index];
-        css(item, 'translateY', val);
-      });
+    [...this.refs.listInner.children].forEach((item, index) => {
+      let val = -css(item.children[0], 'height') * aPos[index];
+      css(item, 'translateY', val);
+    });
 
-      this.props.handleInit({ index: aPos, _: 'index-初始化索引' });
-    }, 60);
+    this.props.handleInit({ index: aPos, _: 'index-初始化索引' });
   };
 
   handleCssPos = () => {
@@ -84,12 +75,9 @@ export default class index extends Component {
       return;
     }
 
-    let aPos = [];
-    this.props.list.forEach((item, index) => {
-      aPos.push(item.findIndex(item => item.val === this.props.linkageVal[index]));
-    });
+    let aPos = this.props.list.map((item, index) => item.findIndex(obj => obj.val === this.props.linkageVal[index]));
 
-    [...this.refs.listBox.children].forEach((item, index) => {
+    [...this.refs.listInner.children].forEach((item, index) => {
       let val = aPos[index];
       if (val !== -1) {
         css(item, 'translateY', -css(item.children[0], 'height') * val);
@@ -106,7 +94,7 @@ export default class index extends Component {
     touch.init = true;
     touch.lastTime = now;
     touch.elIndex = elIndex;
-    touch.el = this.refs.listBox.children[elIndex];
+    touch.el = this.refs.listInner.children[elIndex];
     touch.diffY = 0;
     touch.startY = e.changedTouches[0].pageY;
     touch.oldVal = css(touch.el, 'translateY');
@@ -166,7 +154,7 @@ export default class index extends Component {
       _: 'bool-是否正常,index-最终索引,meta-最终数据,val-最终结果'
     };
 
-    [...this.refs.listBox.children].forEach((item, index) => {
+    [...this.refs.listInner.children].forEach((item, index) => {
       let msg = '警告:心急吃不了热豆腐';
       let children = item.children;
       let nowIndex = Math.abs(css(item, 'translateY') / css(children[0], 'height'));
@@ -224,7 +212,7 @@ export default class index extends Component {
             </div>
           </div>
           <div className="list-outer">
-            <div className="list-inner" ref="listBox">
+            <div className="list-inner" ref="listInner">
               {list.map((item, index) => (
                 <div className="list-box" style={{ width: 100 / list.length + '%' }} key={index} onTouchStart={e => handleStart(index, e)} onTouchMove={handleMove} onTouchEnd={handleEnd} onTouchCancel={handleEnd}>
                   {item.map((_item, _index) => (
