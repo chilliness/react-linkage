@@ -8,34 +8,40 @@ export default class index extends Component {
     isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
-    handleConfirm: PropTypes.func,
-    handleCancel: PropTypes.func,
-    handleOver: PropTypes.func,
-    handleInit: PropTypes.func
+    emitConfirm: PropTypes.func,
+    emitCancel: PropTypes.func,
+    emitOver: PropTypes.func,
+    emitInit: PropTypes.func
   };
 
   static defaultProps = {
     initVal: [],
     cancelText: '取消',
     confirmText: '确定',
-    handleConfirm: () => {},
-    handleCancel: () => {},
-    handleOver: () => {},
-    handleInit: () => {}
+    emitConfirm: () => {},
+    emitCancel: () => {},
+    emitOver: () => {},
+    emitInit: () => {}
   };
 
   constructor(props) {
     super(props);
 
-    let hourList = [...''.padEnd(24)].map((v, i) => ({
-      val: String(i).padStart(2, '0')
-    }));
-    let minuteList = [...''.padEnd(60)].map((v, i) => ({
-      val: String(i).padStart(2, '0')
-    }));
-    let secondList = [...''.padEnd(60)].map((v, i) => ({
-      val: String(i).padStart(2, '0')
-    }));
+    let hourList = Array(24)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i).padStart(2, '0')
+      }));
+    let minuteList = Array(60)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i).padStart(2, '0')
+      }));
+    let secondList = Array(60)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i).padStart(2, '0')
+      }));
 
     this.state = {
       list: [hourList, minuteList, secondList]
@@ -43,19 +49,19 @@ export default class index extends Component {
   }
 
   handleConfirm = e => {
-    this.props.handleConfirm(e);
+    this.props.emitConfirm(e);
   };
 
   handleCancel = e => {
-    this.props.handleCancel(e);
+    this.props.emitCancel(e);
   };
 
   handleOver = e => {
-    this.props.handleOver(e);
+    this.props.emitOver(e);
   };
 
   handleInit = e => {
-    this.props.handleInit(e);
+    this.props.emitInit(e);
   };
 
   render() {
@@ -68,6 +74,6 @@ export default class index extends Component {
       handleInit
     } = this;
 
-    return <LinkBase {...props} list={list} handleConfirm={e => handleConfirm(e)} handleCancel={e => handleCancel(e)} handleOver={e => handleOver(e)} handleInit={e => handleInit(e)} />;
+    return <LinkBase {...props} list={list} emitConfirm={e => handleConfirm(e)} emitCancel={e => handleCancel(e)} emitOver={e => handleOver(e)} emitInit={e => handleInit(e)} />;
   }
 }

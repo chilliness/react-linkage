@@ -56,7 +56,7 @@ export default class index extends Component {
             自定义选择
           </div>
         </div>
-        <LinkageBase handleCancel={e => handleCancel(e, 'baseFlag')} handleConfirm={e => handleConfirm(e, 'base')} isShow={baseFlag} />
+        <LinkageBase emitCancel={e => handleCancel(e, 'baseFlag')} emitConfirm={e => handleConfirm(e, 'base')} isShow={baseFlag} />
         {/* 时间选择 */}
         <div className="input-box">
           <input className="input" type="text" value={time} onChange={() => {}} />
@@ -64,7 +64,7 @@ export default class index extends Component {
             时间选择
           </div>
         </div>
-        <LinkageTime cancelText="cancel" confirmText="confirm" handleCancel={e => handleCancel(e, 'timeFlag')} handleConfirm={e => handleConfirm(e, 'time', ':')} isShow={timeFlag} />
+        <LinkageTime cancelText="cancel" confirmText="confirm" emitCancel={e => handleCancel(e, 'timeFlag')} emitConfirm={e => handleConfirm(e, 'time', ':')} isShow={timeFlag} />
         {/* 日期选择 */}
         <div className="input-box">
           <input className="input" type="text" value={date} onChange={() => {}} />
@@ -72,7 +72,7 @@ export default class index extends Component {
             日期选择
           </div>
         </div>
-        <LinkageDate handleCancel={e => handleCancel(e, 'dateFlag')} handleConfirm={e => handleConfirm(e, 'date')} isShow={dateFlag} />
+        <LinkageDate emitCancel={e => handleCancel(e, 'dateFlag')} emitConfirm={e => handleConfirm(e, 'date')} isShow={dateFlag} />
         {/* 地址选择 */}
         <div className="input-box">
           <input className="input" type="text" value={addr} onChange={() => {}} />
@@ -80,7 +80,7 @@ export default class index extends Component {
             地址选择
           </div>
         </div>
-        <LinkageAddr initVal={['海南省', '三亚市', '天涯区']} handleCancel={e => handleCancel(e, 'addrFlag')} handleConfirm={e => handleConfirm(e, 'addr')} isShow={addrFlag} />
+        <LinkageAddr initVal={['海南省', '三亚市', '天涯区']} emitCancel={e => handleCancel(e, 'addrFlag')} emitConfirm={e => handleConfirm(e, 'addr')} isShow={addrFlag} />
       </div>
     );
   }

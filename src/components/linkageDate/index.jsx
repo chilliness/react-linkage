@@ -8,20 +8,20 @@ export default class index extends Component {
     isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
-    handleConfirm: PropTypes.func,
-    handleCancel: PropTypes.func,
-    handleOver: PropTypes.func,
-    handleInit: PropTypes.func
+    emitConfirm: PropTypes.func,
+    emitCancel: PropTypes.func,
+    emitOver: PropTypes.func,
+    emitInit: PropTypes.func
   };
 
   static defaultProps = {
     initVal: [],
     cancelText: '取消',
     confirmText: '确定',
-    handleConfirm: () => {},
-    handleCancel: () => {},
-    handleOver: () => {},
-    handleInit: () => {}
+    emitConfirm: () => {},
+    emitCancel: () => {},
+    emitOver: () => {},
+    emitInit: () => {}
   };
 
   constructor(props) {
@@ -35,12 +35,16 @@ export default class index extends Component {
       yearList.push({ val: String(+year + i) });
     }
 
-    let monthList = [...''.padEnd(12)].map((v, i) => ({
-      val: String(i + 1).padStart(2, '0')
-    }));
-    let dateList = [...''.padEnd(31)].map((v, i) => ({
-      val: String(i + 1).padStart(2, '0')
-    }));
+    let monthList = Array(12)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i + 1).padStart(2, '0')
+      }));
+    let dateList = Array(31)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i + 1).padStart(2, '0')
+      }));
 
     this.state = {
       list: [yearList, monthList, dateList],
@@ -74,23 +78,25 @@ export default class index extends Component {
     }
 
     let days = new Date(year, month, 0).getDate();
-    let dateList = [...''.padEnd(days)].map((v, i) => ({
-      val: String(i + 1).padStart(2, '0')
-    }));
+    let dateList = Array(days)
+      .fill('')
+      .map((v, i) => ({
+        val: String(i + 1).padStart(2, '0')
+      }));
     this.setState({ list: [this.state.list[0], this.state.list[1], dateList] });
   };
 
   handleConfirm = e => {
-    this.props.handleConfirm(e);
+    this.props.emitConfirm(e);
   };
 
   handleCancel = e => {
-    this.props.handleCancel(e);
+    this.props.emitCancel(e);
   };
 
   handleOver = e => {
     let { which, val, bool } = e;
-    this.props.handleOver(e);
+    this.props.emitOver(e);
 
     // 这步判断是必须的，防止获取不到数据报错
     if (!bool) {
@@ -99,9 +105,11 @@ export default class index extends Component {
 
     if (which !== 2) {
       let days = new Date(val[0], val[1], 0).getDate();
-      let dateList = [...''.padEnd(days)].map((v, i) => ({
-        val: String(i + 1).padStart(2, '0')
-      }));
+      let dateList = Array(days)
+        .fill('')
+        .map((v, i) => ({
+          val: String(i + 1).padStart(2, '0')
+        }));
       this.setState({ list: [this.state.list[0], this.state.list[1], dateList] });
 
       if (days < val[2]) {
@@ -111,7 +119,7 @@ export default class index extends Component {
   };
 
   handleInit = e => {
-    this.props.handleInit(e);
+    this.props.emitInit(e);
   };
 
   render() {
@@ -124,6 +132,6 @@ export default class index extends Component {
       handleInit
     } = this;
 
-    return <LinkBase {...props} list={list} linkageVal={linkageVal} handleConfirm={e => handleConfirm(e)} handleCancel={e => handleCancel(e)} handleOver={e => handleOver(e)} handleInit={e => handleInit(e)} />;
+    return <LinkBase {...props} list={list} linkageVal={linkageVal} emitConfirm={e => handleConfirm(e)} emitCancel={e => handleCancel(e)} emitOver={e => handleOver(e)} emitInit={e => handleInit(e)} />;
   }
 }

@@ -14,10 +14,10 @@ export default class index extends Component {
     isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
-    handleConfirm: PropTypes.func,
-    handleCancel: PropTypes.func,
-    handleOver: PropTypes.func,
-    handleInit: PropTypes.func
+    emitConfirm: PropTypes.func,
+    emitCancel: PropTypes.func,
+    emitOver: PropTypes.func,
+    emitInit: PropTypes.func
   };
 
   static defaultProps = {
@@ -26,10 +26,10 @@ export default class index extends Component {
     linkageVal: [],
     cancelText: '取消',
     confirmText: '确定',
-    handleConfirm: () => {},
-    handleCancel: () => {},
-    handleOver: () => {},
-    handleInit: () => {}
+    emitConfirm: () => {},
+    emitCancel: () => {},
+    emitOver: () => {},
+    emitInit: () => {}
   };
 
   componentDidMount() {
@@ -62,12 +62,12 @@ export default class index extends Component {
       throw Error('初始化失败，请核对数据有效性');
     }
 
-    [...this.refs.listInner.children].forEach((item, index) => {
+    [...this.refs.listInnerRef.children].forEach((item, index) => {
       let val = -css(item.children[0], 'height') * aPos[index];
       css(item, 'translateY', val);
     });
 
-    this.props.handleInit({ index: aPos, _: 'index-初始化索引' });
+    this.props.emitInit({ index: aPos, _: 'index-初始化索引' });
   };
 
   handleCssPos = () => {
@@ -77,7 +77,7 @@ export default class index extends Component {
 
     let aPos = this.props.list.map((item, index) => item.findIndex(obj => obj.val === this.props.linkageVal[index]));
 
-    [...this.refs.listInner.children].forEach((item, index) => {
+    [...this.refs.listInnerRef.children].forEach((item, index) => {
       let val = aPos[index];
       if (val !== -1) {
         css(item, 'translateY', -css(item.children[0], 'height') * val);
@@ -94,7 +94,7 @@ export default class index extends Component {
     touch.init = true;
     touch.lastTime = now;
     touch.elIndex = elIndex;
-    touch.el = this.refs.listInner.children[elIndex];
+    touch.el = this.refs.listInnerRef.children[elIndex];
     touch.diffY = 0;
     touch.startY = e.changedTouches[0].pageY;
     touch.oldVal = css(touch.el, 'translateY');
@@ -141,7 +141,7 @@ export default class index extends Component {
       target: { translateY: targetY },
       type: 'easeOut',
       time: 100,
-      callBack: () => this.props.handleOver(this.handleResult(touch.elIndex))
+      callBack: () => this.props.emitOver(this.handleResult(touch.elIndex))
     });
   };
 
@@ -154,7 +154,7 @@ export default class index extends Component {
       _: 'bool-是否正常,index-最终索引,meta-最终数据,val-最终结果'
     };
 
-    [...this.refs.listInner.children].forEach((item, index) => {
+    [...this.refs.listInnerRef.children].forEach((item, index) => {
       let msg = '警告:心急吃不了热豆腐';
       let children = item.children;
       let nowIndex = Math.abs(css(item, 'translateY') / css(children[0], 'height'));
@@ -178,11 +178,11 @@ export default class index extends Component {
   };
 
   handleConfirm = () => {
-    this.props.handleConfirm(this.handleResult());
+    this.props.emitConfirm(this.handleResult());
   };
 
   handleCancel = () => {
-    this.props.handleCancel(this.handleResult());
+    this.props.emitCancel(this.handleResult());
   };
 
   handlePrevent = e => {
@@ -212,7 +212,7 @@ export default class index extends Component {
             </div>
           </div>
           <div className="list-outer">
-            <div className="list-inner" ref="listInner">
+            <div className="list-inner" ref="listInnerRef">
               {list.map((item, index) => (
                 <div className="list-box" style={{ width: 100 / list.length + '%' }} key={index} onTouchStart={e => handleStart(index, e)} onTouchMove={handleMove} onTouchEnd={handleEnd} onTouchCancel={handleEnd}>
                   {item.map((_item, _index) => (

@@ -9,20 +9,20 @@ export default class index extends Component {
     isShow: PropTypes.bool.isRequired,
     cancelText: PropTypes.string,
     confirmText: PropTypes.string,
-    handleConfirm: PropTypes.func,
-    handleCancel: PropTypes.func,
-    handleOver: PropTypes.func,
-    handleInit: PropTypes.func
+    emitConfirm: PropTypes.func,
+    emitCancel: PropTypes.func,
+    emitOver: PropTypes.func,
+    emitInit: PropTypes.func
   };
 
   static defaultProps = {
     initVal: [],
     cancelText: '取消',
     confirmText: '确定',
-    handleConfirm: () => {},
-    handleCancel: () => {},
-    handleOver: () => {},
-    handleInit: () => {}
+    emitConfirm: () => {},
+    emitCancel: () => {},
+    emitOver: () => {},
+    emitInit: () => {}
   };
 
   state = {
@@ -60,17 +60,17 @@ export default class index extends Component {
   };
 
   handleConfirm = e => {
-    this.props.handleConfirm(e);
+    this.props.emitConfirm(e);
   };
 
   handleCancel = e => {
-    this.props.handleCancel(e);
+    this.props.emitCancel(e);
   };
 
   handleOver = e => {
     let { which, meta, index, bool } = e;
     let str = String(index);
-    this.props.handleOver(e);
+    this.props.emitOver(e);
 
     // 这步判断是必须的，防止获取不到数据报错
     if (!bool) {
@@ -106,7 +106,7 @@ export default class index extends Component {
 
   handleInit = e => {
     this.setState({ lastIndex: String(e.index) });
-    this.props.handleInit(e);
+    this.props.emitInit(e);
   };
 
   render() {
@@ -119,6 +119,6 @@ export default class index extends Component {
       handleInit
     } = this;
 
-    return <LinkBase {...props} list={list} linkageVal={linkageVal} handleConfirm={e => handleConfirm(e)} handleCancel={e => handleCancel(e)} handleOver={e => handleOver(e)} handleInit={e => handleInit(e)} />;
+    return <LinkBase {...props} list={list} linkageVal={linkageVal} emitConfirm={e => handleConfirm(e)} emitCancel={e => handleCancel(e)} emitOver={e => handleOver(e)} emitInit={e => handleInit(e)} />;
   }
 }
